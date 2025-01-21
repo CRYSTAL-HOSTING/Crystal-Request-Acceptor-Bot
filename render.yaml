@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: Crystal-Request-Accept-Bot
+    env: python
+    runtime: python3
+    buildCommand: ""
+    startCommand: python bot.py
+    envVars:
+      - key: API_ID
+        fromDatabase: API_ID
+      - key: API_HASH
+        fromDatabase: API_HASH
+      - key: BOT_TOKEN
+        fromDatabase: BOT_TOKEN
+      - key: DB_URL
+        fromDatabase: DB_URL
+      - key: ADMINS
+        fromDatabase: ADMINS
+databases:
+  - name: mongo-db
+    ipAllowList: [ "0.0.0.0/0" ]
