@@ -4,6 +4,23 @@ from pyrogram.types import *
 from motor.motor_asyncio import AsyncIOMotorClient
 from os import environ as env
 import asyncio, datetime, time
+from flask import Flask
+from threading import Thread
+
+# Flask App for Port Binding
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "The Telegram bot is running!"
+
+def run_web():
+    app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)))
+
+# Start Flask and Bot
+if __name__ == '__main__':
+    Thread(target=run_web).start()
+    Bot.run()
 
 ACCEPTED_TEXT = "Hey {user}\n\nYour Request For {chat} Is Accepted ✅"
 START_TEXT = "Hai {}\n\nI am Auto Request Accept Bot Working For All Channels. Add Me In Your Channel To Use."
