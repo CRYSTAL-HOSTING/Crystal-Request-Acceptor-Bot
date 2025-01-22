@@ -15,16 +15,9 @@ def home():
     return "The Telegram bot is running!"
 
 def run_web():
-    app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)))
+    app.run(host='0.0.0.0', port=int(env.get('PORT', 5000)))  # Make sure to use the correct env variable
 
-# Start Flask and Bot
-if __name__ == '__main__':
-    Thread(target=run_web).start()
-    Bot.run()
-
-ACCEPTED_TEXT = "Hey {user}\n\nYour Request For {chat} Is Accepted ✅"
-START_TEXT = "Hai {}\n\nI am Auto Request Accept Bot Working For All Channels. Add Me In Your Channel To Use."
-
+# Bot Config
 API_ID = int(env.get('API_ID'))
 API_HASH = env.get('API_HASH')
 BOT_TOKEN = env.get('BOT_TOKEN')
@@ -43,6 +36,10 @@ Bot = Client(
     api_hash=API_HASH,
     bot_token=BOT_TOKEN,
 )
+
+# Bot Commands Handlers
+ACCEPTED_TEXT = "Hey {user}\n\nYour Request For {chat} Is Accepted ✅"
+START_TEXT = "Hai {}\n\nI am Auto Request Accept Bot Working For All Channels. Add Me In Your Channel To Use."
 
 @Bot.on_message(filters.command("start") & filters.private)
 async def start_handler(c, m):
@@ -106,4 +103,7 @@ async def req_accept(c, m):
     except Exception as e:
         print(e)
 
-Bot.run()
+# Start Flask in a background thread, then the Bot
+if __name__ == '__main__':
+    Thread(target=run_web).start()  # Start Flask
+    Bot.run()  # Start Bot
